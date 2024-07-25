@@ -1,0 +1,19 @@
+# Dockerfile for Node1
+FROM ubuntu:20.04
+
+RUN apt-get update && apt-get install -y strongswan iproute2 iputils-ping net-tools tcpdump
+
+# Copy the IPSec configuration files
+COPY ipsec-node2.conf /etc/ipsec.conf
+COPY ipsec.secrets /etc/ipsec.secrets
+
+# Copy the entrypoint script
+COPY entrypoint-node2.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
+
+# Expose the ports used for IPSec
+EXPOSE 500/udp
+EXPOSE 4500/udp
+
+ENTRYPOINT ["/entrypoint.sh"]
+
